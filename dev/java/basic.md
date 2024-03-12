@@ -246,7 +246,16 @@ enum Season implements Info {
     },
 ```
 
-## Annotation 注解
+### Record 
+since java17，自动 toString, getter, hashCode, equals, init
+
+```java
+public record (int a){};
+```
+
+自动父类 Record, 不允许有子类
+
+### Annotation 注解
 Java 5 后，引入了 `@Override`, `@Deprecated`, `@SuppressWarnings` 等，可以在类编译、运行时加载，体现不同的功能
 - 可用于修饰包、类、构造函数、方法、成员变量、参数、局部变量声明
 - 可以添加 k-v 参数 `@SuppressWarnings(value = "unchecked")`
@@ -552,6 +561,8 @@ BigDecimal, BigInteger
 
 #### Map
 与 Collection 同级的接口，存储 pair-wize 数据。`HashMap`, `LinkedHashMap`, `TreeMap`, `Hashtable`, `Properties`
+
+hashCode 和 equals 都会参与比较
 - HashMap（主要实现类，线程不安全，支持 null）
   - 数组 + 单向链表 + 红黑树(jdk8)
 - LinkedHashMap : HashMap 是 HashMap 的子类，底层增加了一个 双向列表记录添加顺序，提高遍历效率
@@ -588,7 +599,7 @@ for (Object obj : collection) {
 
 底层由 Iterator -> Itr 实现
 
-# 泛型
+# 泛型 Parameterized Type
 java 的类型介于 c++ 和 python 之间，支持泛型，但是在实例化时也可以不指定类型，默认是 Object
 
 指明泛型类型后，会进行类型检查（必须是引用类型）
@@ -626,6 +637,187 @@ list.add(null); // 尽允许读取或添加 null(引用类型通用)
 
 #### File
 仅表示路径，不一定存在
+
+## Stream
+整体上，分为字节流和字符流。字节流是 `InputStream`, `OutputStream` 的子类，字符流是 `Reader`, `Writer` 的子类。这四个是抽象基类
+
+```java
+File file = new File("file.txt");
+// File 字符流
+FileReader fr = new FileReader(file);
+FileWriter fw = new FileWriter(file, false);
+// File 字节流
+FileInputStream fis = new FileInputStream(file);
+FileOutputStream fos = new FileOutputStream(file);
+```
+
+在基本流之上，包装成缓冲流 `BufferedInputStream`, `BufferedOutputStream`, `BufferedReader`, `BufferedWriter`
+也称为处理流
+
+注：复制文件应该有 os call 可以用
+
+### 转换流
+`InputStreamReader`, `OutputStreamWriter`，用于字符流和字节流之间的转换
+
+### 数据流和对象流
+`DataInputStream`/`DataOutputStream`, `ObjectInputStream`/`ObjectOutputStream`，用于读写基本数据类型和对象
+
+数据流可以将基本数据类型和字符串写入文件，但不支持对象
+
+对象流可以将对象写入文件，但是对象需要实现 Serializable 接口。（serializable 是一个标记接口，没有方法）
+
+需要指定 serialVersionUID，用于序列化和反序列化时的版本号检查。编译器会自动生成 UID，但是当类变化时，UID 会变化，导致反序列化失败
+
+使用 transient 关键字修饰的变量不会被序列化
+
+
+### stdio
+可以使用 Reader, Stream 直接读写
+
+SetIn, SetOut, SetErr 可以重定向 System.in/out/err
+
+> System.out 在 java 中是 final 的。但是使用 JNI native 方法可以修改
+
+# 反射
+反射是指在程序在运行期可以拿到一个对象的所有信息。(JDK 17 强封装 JDK 内部 api，不允许反射访问)
+
+```java
+Class clazz = Person.class;
+Constructor[] constructors = clazz.getDeclaredConstructors();
+```
+
+使用反射可以在运行时处理注解，基本所有类型（包括 void, Class）都有对应的 Class 对象
+
+#### Class 类
+类和接口从 .class 文件加载到内存后，就是一个 Class 类的实例，称作运行时类（在方法区）
+
+```java
+Class clazz = Person.class; // Person 是类型，Person.class 是类的对象
+Class clazz = new Person().getClass();
+Class clazz = Class.forName("com.example.Person");
+var clazz = ClassLoader.getSystemClassLoader().loadClass("com.example.Person");
+```
+
+上述各 clazz 地址相同。同一个类只会加载一次，不同类加载器加载的类是不同的
+
+---
+
+可以使用反射获取类的全部信息
+
+#### 获取注解
+必须是 RUNTIME 的注解
+
+```java
+@Target({TYPE, FIELD})
+@Retention(RetentionPolicy.RUNTIME)
+public @interface MyAnnotation {
+    String value() default "hello";
+}
+
+@MyAnnotation(value = "hi")
+public class Person {
+    public static void main(String[] args) {
+        Class clazz = Person.class;
+        Annotation[] annotations = clazz.getAnnotations();
+        }
+    }
+}
+```
+
+#### 获取泛型参数
+`Type` 是一个接口，`Class` 是 `Type` 的实现类
+
+```java
+Class clazz = Person.class;
+ParameterizedType parameterizedType = (ParameterizedType) clazz.getGenericSuperclass();
+```
+
+#### 调用变量 / 方法
+可以调用动态/静态方法，需要注意不同查询方法返回的权限不一样，然后 get/set, invoke 即可
+
+```java
+// 调用指定构造器
+Constructor constructor = clazz.getConstructor(String.class, int.class);
+constructor.setAccessible(true);
+Object obj = constructor.newInstance("Tom", 12);
+```
+
+#### 动态代理
+```java
+public class ProxyFactory {
+    public static Object getProxyInstance(Object obj) {
+        return Proxy.newProxyInstance(obj.getClass().getClassLoader(), obj.getClass().getInterfaces(), new InvocationHandler() {
+            @Override
+            public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+                return method.invoke(obj, args);
+            }
+        });
+    }
+}
+```
+
+> 动态加载类使得路由组件可以动态加载 handler 类并生成对象
+
+# 类的加载器
+## Class Loader Subsystem
+Loading -> Linking -> Initialization
+
+#### Loading 装载
+将 .class 文件加载到内存中，生成一个 java.lang.Class 对象。由类加载器完成
+
+#### Linking 链接
+- Verify 验证，确保 .class 文件符合 JVM 规范。如 magic number 是否为 0xCAFEBABE；常量池中的各种符号引用中的符号是否有对应的类
+- Prepare 准备，为类的静态变量分配内存，并进行默认初始化赋值（方法区）
+- Resolve 解析，将符号引用转换为直接引用。符号引用是指用一组符号来描述所引用的目标，可以是任何字面量。直接引用是指直接指向目标的指针、相对偏移或一个能间接定位到目标的句柄
+
+#### Initialization 初始化
+执行类构造器 `<clinit>()` 方法的过程。类构造器是由编译器自动收集类中的所有类变量的赋值动作和静态语句块中的语句合并产生的。类构造器是隐式的，不需要定义。
+
+```java
+public class ClinitTest {
+    static int a = 1; // prepare=0, clinit=1
+    static {
+        a = 2; // clinit=2
+    }
+}
+```
+
+#### 类加载器
+在 Loading 阶段，类加载器会将 .class 文件加载到内存中。类加载器是 Java 运行时环境中的一部分，负责加载类文件，生成类对象。
+
+在 jdk 8(jdk 9 之前)，加载器的层次关系如下树状结构
+- BootStrap ClassLoader: 加载核心类库，如 JAVA_HOME/jre/lib/rt.jar
+- Extension ClassLoader: 加载扩展类库，如 jre/lib/ext
+- System(Application) ClassLoader: 加载应用类库，如 classpath，自定义的类
+- User ClassLoader: 用户自定义类加载器
+
+其中，BootStrap ClassLoader 是用 C++ 实现的，其他都是 Java 实现的。后者都是继承自 java.lang.ClassLoader
+
+> ```
+> rt.jar
+> |
+> |-- java
+> |   |-- lang
+> |   |   |-- Class.class
+> |   |   |-- Object.class
+> |   |   |-- String.class
+> |   |   |-- ...
+> |-- ...
+> ```
+
+#### Class.getClassLoader
+bootstrap 由于是 c 写的，拿不到 Java 对象，是 null
+
+这四种构造器无继承关系，而是表示先后尝试加载的顺序（双亲委派机制）
+
+#### 自定义类加载器
+同一个类的加载器只能把某个类加载一次。由于版本的原因，可能希望加载多份，实现应用隔离
+
+如果对 .class 文件加密了，则需要自定义加载器解密
+
+#### ClassLoader 加载指定配置文件
+可以通过 `getResourceAsStream` 打开流并读入文件，用于后续处理
+
 
 
 # Misc
@@ -723,3 +915,135 @@ static class Entry<K,V> extends HashMap.Node<K,V> {
 
 #### HashSet
 `PRESENT` := new Object()，用 key 做 set
+
+
+## JDK 8
+### Lambda
+
+> C++ 编译器实现 lamdba 函数的方式
+> 1. 生成一个临时的 closure type，operator() 调用 lambda 函数体，capture list 作为成员变量
+> 2. 创建临时的 closure 对象，调用 operator()
+> 3. inline 优化
+>
+> 即实际上是 function object
+
+```java
+Comparator<Integer> com = (x, y) -> Integer.compare(x, y);
+```
+
+赋值给只有一个抽象方法的接口，如 Runnable, Callable, Comparator。lambda 本质上提供了`实现接口的对象`
+- 这种接口称为函数式接口(functional interface)
+- 隐去了 new 和 匿名实现类
+
+#### util.function
+
+提供了类型的声明。根据抽象方法的参数和返回值，分为
+
+- `Consumer<T>`: void accept(T t)
+- `Supplier<T>`: T get()
+- `Function<T, R>`: R apply(T t)
+- `BiFunction<T, U, R>`: R apply(T t, U u)
+- `Predicate<T>`: boolean test(T t)
+
+#### 方法引用
+
+```java
+Consumer<String> con = System.out::println;
+```
+
+是基于 lambda 的进一步简化，当需要提供函数式接口的实例时，可以用方法引用替换 lambda 表达式（相同 ret-decl-list）
+
+1. 类 :: 静态方法
+2. 对象 :: 非静态方法
+3. 类 :: 非静态方法（类似把第一个参数当作 this）`String::equals` vs. `x.equals(y)`
+
+类似的，构造器引用 `ClassName::new`，数组引用 `Type[]::new`
+
+### Stream API
+
+> 关系型数据库 MySQL, Oracle
+>
+> 非关系型数据库 MongDB, Redis
+
+对操作的抽象，类似用 SQL 进行 db 查询，可以对非关系型数据库的返回值在内存中进行操作
+
+StreamAPI 不会改变源对象，并且是延迟执行的。没有中止操作则不执行
+
+这些 api 定义在 collection 接口中，可以通过 `stream()` 方法获取
+```java
+List<String> list = new ArrayList<>();
+Stream<String> stream = list.stream(); // 顺序流，也有并行流
+// Stream.of(1, 2, 3, 4, 5);
+```
+
+#### 中间操作
+中间操作如 filter, map, limit, skip, sorted, distinct, flatMap
+
+#### 终止操作
+- 匹配, 查找：count, collect, findxxx , xxxMatch, forEach
+- 规约：reduce
+- 收集：collect
+
+```java
+stream.filter((e) -> e.length() > 3).forEach(System.out::println);
+stream.collect(Collectors.toList()); // Collectors 工具类提供了多种方式
+```
+
+
+## JDK 17
+
+>JEP (Java Enhancement Proposal)
+
+#### REPL 
+交互式编程环境 `jShell` Read, Eval, Print, Loop
+
+#### try()
+实现 `AutoCloseable` 接口的类，可以在 try 声明，自动关闭
+```java
+try (BufferedReader br = new BufferedReader(new FileReader(path))) {
+    return br.readLine();
+} catch (IOException e) {
+    e.printStackTrace();
+}
+```
+
+#### instanceof <varName>
+```java
+return obj instanceof String s ? s : "";
+```
+
+#### switch
+支持返回值，多个 case 合并，省略 break
+```java
+String result = switch (day) {
+    case MONDAY, TUESDAY -> "work";
+    default -> {
+        if (day.isEmpty()) {
+            yield "empty";
+        } else {
+            yield "weekend";
+        }
+    }
+};
+```
+
+模式匹配(preview feature)
+```java
+switch (obj) {
+    case String s -> s.length();
+    case Integer i -> i;
+    case List<String> list -> list.size();
+    default -> 0;
+}
+```
+
+#### record
+
+#### 密封类
+只允许声明的类继承当前类
+
+```java
+sealed class Shape permits Circle, Rectangle, Triangle {}
+```
+
+sealed, non-sealed
