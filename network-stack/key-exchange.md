@@ -7,3 +7,5 @@ prime $p$, generator $\alpha$ of $\Z_p^*$
 - $𝐵$ chooses random $𝑦$, send $𝐴$ message $𝛼^𝑦 \mod 𝑝$,
 - $𝐵$ receives $𝛼^𝑥$ and computes the shared key as $\bm K = (𝑎^𝑥)^𝑦 \mod 𝑝$
 - $𝐴$ receives $𝛼^𝑦$ and computes the shared key as $\bm K=(𝑎^𝑦)^𝑥 \mod 𝑝$
+
+若 middle 发送给 $B$ $\alpha^{x'}$, middle 和 $B$ 会同样计算出 $K = \alpha^{x'y}$.
