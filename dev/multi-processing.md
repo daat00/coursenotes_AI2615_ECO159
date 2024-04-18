@@ -95,3 +95,20 @@ Async/Await 定义了协程的语法(python), 定义了 Promise 的语法(js).
 `await` 声明了当前语句可以被挂起
 
 [ref](https://blog.csdn.net/rhx_qiuzhi/article/details/124332114)
+
+# 协程
+协程的本质是单线程（单核）切换/保存状态（上下文），不涉及多核并行，仅并发
+
+> 所以，理论上可以通过函数内反复调用 api，实现类似协程的控制流来回跳转。语法糖改变函数的调用顺序本质上也是协程了
+
+### 生成器
+```python
+def gen():
+    for i in range(10):
+        yield i
+
+for i in gen():
+    print(i)
+```
+
+这样，for 每循环一轮，gen 函数会接着上一个 yield 的地方继续执行
