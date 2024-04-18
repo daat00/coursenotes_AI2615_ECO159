@@ -31,3 +31,18 @@ struct malloc_chunk {
   struct malloc_chunk* bk_nextsize;
 };
 ```
+
+# 文件系统
+## 挂载文件系统
+不同于 windows, linux 只有一个根文件目录（相对地，也只有一个根文件系统）。其他文件系统都被挂载到这个根文件系统上。 
+
+#### 挂载点
+将新的 fs 挂载到根文件系统上的某个目录，这个目录就是挂载点。挂载点的内容会被新的 fs 遮蔽，unmount 后显示
+
+```shell
+mount <device> <mount-point>
+```
+已经挂载的文件系统可以通过 `mount` 查看挂载数据表。kernel 会自动在 `/etc/mtab` 文件记录挂载信息，也可以 cat `/proc/mounts` 查看
+
+#### 挂载参数
+mount 时，可以指定 -o MOUNT_OPTIONS 参数。可以配置 ro/rw, sync/asyn, noexec/exec, nodev/dev, nosuid/suid 等参数

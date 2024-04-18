@@ -248,3 +248,4 @@ For compatibility with other operating system, they are formatted with FAT32.
 Use Linux *vfat* driver
 
 
+https://xdaforums.com/t/info-android-device-partitions-and-filesystems.3586565/
