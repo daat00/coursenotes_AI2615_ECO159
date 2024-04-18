@@ -14,3 +14,10 @@ https://www.digitalcitizen.life/simple-questions-what-firmware-what-does-it-do/
 > stock ROM / stock firmware 即出厂自带的 ROM
 
 固件的格式
+
+
+# 可信执行环境 TEE
+指软件服务端可以相信客户端的返回值（例如支付宝可以相信手机确实认证的指纹）
+- 数据有手机 vendor 直接写入 TEE
+
+> 指纹 device 是直连 TEE 的；摄像头不是。相当于第三个设备
