@@ -28,7 +28,8 @@ Step 3: `method call chain similarity comparison`(method call chain)
 见 Table 2,3,4. 要求 app.class 的 signature *identical* to TPL.class 的 signature
 
 ### Step 2 - Method-opcode similarity detection
-coarse-match
+(coarse-match)
+
 可能会出现多对多（多对一，一对多）的情况，需要更细致地用 method 来 match class
 
 > Dalvik inst = opcode + operand
