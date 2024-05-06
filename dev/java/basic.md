@@ -40,6 +40,21 @@ project
 - \* 通配符不会匹配子目录
 - import static 可以直接调用静态方法
 
+#### 导包顺序
+java 路径查找的规则
+
+```
+java -cp[--classpath]
+```
+
+本质上是由 jvm 为一个 .class 文件寻找另一个文件。于是有两种情况
+1. 打包的 .class: 编译后的 class 文件被打包到 .jar 中。此时，传参 jar 包，或用 * 号查找所有 jar
+2. 散装 .class: 编译后的 class 文件在某个目录下，此时传参为目录即可
+
+
+Java会查找当前工作目录下的 .class, .jar文件，看是否存在要导入的包。 如果找不到，会去查找Java类路径（classpath）。CLASSPATH 是环境变量，也可以通过 -cp 参数指定
+
+> APK 与 jar 不同，依赖的库会被打包进去。通常，仅会依赖 framework（custom build 如 Amazon Kindle Fire, Barns & Noble Nook 搭建了 custom launchers and other services，在 framework 中提供了不同的函数）
 #### 权限
 - private: 本类内
 - 缺省: 本包内

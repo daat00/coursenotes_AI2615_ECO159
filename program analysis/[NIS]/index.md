@@ -43,3 +43,17 @@ UAF 常用 0x0c0c0c0c
 - 内存型：缓存区溢出、UAF
 
 > Nessus, NeXpose, MSF
+
+
+# IoT
+常用架构 ARM, MIPS
+
+> 与 x86 的区别，有 ra 保存返回地址。由于流水线，nop, PC + 8 是常见操作
+
+> 与 x86 不同，缓存的非一致性
+>
+> Data Cache 与 Instruction Cache 分开，shellcode 写到 Data cache 之后直接读 IC 读不到
+
+变量的栈帧位置和声明顺序是相反的，read 不会补充 0
+
+cgi 通过环境变量传参
