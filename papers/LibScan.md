@@ -50,6 +50,23 @@ $$
 MOSS(apk.class,tpl.class) = \frac{\text{\#opcode of matched TPL.class.methods }}{\text{ \#opcode of all TPL.class.methods}}
 $$
 
+'''python
+:filter_result: Dict[lib.cls_name, Set[apk.cls_name]], apk 中，与固定 lib.cls_name 匹配的所有 apk.cls_name
+    :opcode_dict: opcode -> int
+
+    for lib_class:  for apk_class:
+        if abstract, 只要 lib_cls 和 apk_cls 的 method_num 相等，就匹配
+        else:
+            for lib_method: for apk_method:
+                if lib_method 与 apk_method 的 descriptor 相等，进行进一步比较。
+                在 match 的前提下（lib_method 的 opcode 均出现于 apk），取 lib_method 与 apk_method 的 argmin( |lib_method_opcode_num - apk_method_opcode_num| ) 作为最佳匹配，记录 lib_method -> apk_method 于 methods_match_dict 中。
+
+            把每个 method 匹配后，计算 sum(apk_class_method.opcode_num) / apk_class.opcode_num。**若按该 APK 公式计算的比率**超过阈值 class_similar，认为 lib_class 匹配了（多个）apk_class，记录于 match_classes, 并记录 lib_class -> {apk_class -> methods_match_dict} 于 lib_class_match_dict 中。
+
+    返回 lib_match_classes, abstract_lib_match_classes, lib_class_match_dict
+    """
+'''
+
 
 ### Step 3 - method call chain similarity comparison
 对于上一步选出来的 `best matched` 的 apk 函数和 TPL 函数 $m, n$, 分别通过限制 depth 的 dfs 得到 call chain $CC^m, CC^n$（函数的集合）。
