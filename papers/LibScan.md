@@ -50,7 +50,7 @@ $$
 MOSS(apk.class,tpl.class) = \frac{\text{\#opcode of matched TPL.class.methods }}{\text{ \#opcode of all TPL.class.methods}}
 $$
 
-'''python
+```python
 :filter_result: Dict[lib.cls_name, Set[apk.cls_name]], apk 中，与固定 lib.cls_name 匹配的所有 apk.cls_name
     :opcode_dict: opcode -> int
 
@@ -64,8 +64,7 @@ $$
             把每个 method 匹配后，计算 sum(apk_class_method.opcode_num) / apk_class.opcode_num。**若按该 APK 公式计算的比率**超过阈值 class_similar，认为 lib_class 匹配了（多个）apk_class，记录于 match_classes, 并记录 lib_class -> {apk_class -> methods_match_dict} 于 lib_class_match_dict 中。
 
     返回 lib_match_classes, abstract_lib_match_classes, lib_class_match_dict
-    """
-'''
+```
 
 
 ### Step 3 - method call chain similarity comparison
