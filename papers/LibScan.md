@@ -7,6 +7,9 @@ Out: (TPL in .apk) ?
 
 **Step 0**: 粗筛，遍历每个 apk 的类和 TPL 的类，计算每个 pair 的相似度 (class - class similarity)
 
+1. fix 一个待测 APK
+2. for each fixed 待测 TPL，处理 TPL 之间的依赖关系，合并相关 node_dict，然后进行 detect
+
 ---
 **准备工作**：提取 feature，fingerprint / method opcode
 
@@ -26,6 +29,10 @@ Step 3: `method call chain similarity comparison`(method call chain)
 
 ### Step 1 - Signature based Class Correspondence Detection
 见 Table 2,3,4. 要求 app.class 的 signature *identical* to TPL.class 的 signature
+
+对每个 TPL.class, fix 该 class，然后求 apk.class 中满足所有约束（signature）的 class，返回一个集合
+
+
 
 ### Step 2 - Method-opcode similarity detection
 (coarse-match)
@@ -67,7 +74,13 @@ $$
 # 代码思路
 所有 .class 均被转换为 .dex 交由 androgurad 处理
 
-分析的入口在 module/analyzer `search_libs_in_app`
+分析的入口在 module/analyzer `search_libs_in_app`，顶层函数建立数个 cache，然后 for apk: for TPL，查询其之前分析的结果。若没有则进行分析（记忆化暴力搜索
+
+在顶层循环中，循环检查是否有未分析的 TPL.jar，如有，则对于每个包不同版本的 TPL(.jar) 中，遍历每个 TPL.class 找到 match 的 apk_class，进行 signature 比较
+
+然后进行 coarse_match 和 fine_match
+
+
 
 ### ThirdLib 反编译类
 该类基于 Androguard 的 .dex parser 进行 feature extraction
