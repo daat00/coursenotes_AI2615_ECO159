@@ -30,7 +30,7 @@ Step 3: `method call chain similarity comparison`(method call chain)
 ### Step 1 - Signature based Class Correspondence Detection
 见 Table 2,3,4. 要求 app.class 的 signature *identical* to TPL.class 的 signature
 
-对每个 TPL.class, fix 该 class，然后求 apk.class 中满足所有约束（signature）的 class，返回一个集合
+对每个 TPL.class, fix 该 class，然后求 apk.class 中满足所有约束（signature）的 class（集合交集），返回一个集合
 
 
 
