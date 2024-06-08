@@ -21,3 +21,9 @@ https://www.digitalcitizen.life/simple-questions-what-firmware-what-does-it-do/
 - 数据有手机 vendor 直接写入 TEE
 
 > 指纹 device 是直连 TEE 的；摄像头不是。相当于第三个设备
+
+
+# windows 打包
+打包就是安装，就是复制文件，并不包括编译
+
+inno setup 常用
