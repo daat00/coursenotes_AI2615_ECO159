@@ -1,0 +1,9 @@
+markdown: kramdown
+kramdown:
+  input: GFM
+  math_engine: mathjax
+
+mathjax: true
+theme: jekyll-theme-minimal
+plugins:
+  - jekyll-mathjax
