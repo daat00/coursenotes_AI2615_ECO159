@@ -118,3 +118,5 @@ export default {
 
 ## Web manifest
 构建工具都会留一个 manifest.json。用于让后续工具能找到编译后名字有变化的文件。    
+
+例如，CTFd 的 jinja 模板中，可以通过 `Assets.css("<original-name>")` 来引入 css 文件。python 工具会通过 manifest 找到编译后的文件名，然后替换。（在这个场景下，文件名后面会加 hash）
