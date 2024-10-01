@@ -185,6 +185,10 @@ async function f() {
 
 async 声明函数永远返回一个 promise
 
+await 会暂停函数执行，直到 promise resolve，并且把 then 的结果拿出来作为返回值，可以少写一层 then
+
+可以查看 MDN 的 Promise 文档
+
 ### EcmaScript 2020
 `?.` optional chaining
 
