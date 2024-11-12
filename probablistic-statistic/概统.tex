@@ -1,0 +1,447 @@
+\documentclass[a4paper]{ctexart}
+\usepackage{geometry}
+%\usepackage{graphicx}
+\usepackage{bm}
+\usepackage{amsmath}
+\usepackage{xcolor}
+\geometry{hmargin=1.25in,vmargin=1in}
+\begin{document}
+\section{基础概率}
+\subsection{概率公理}
+\noindent
+1.\textbf{非负性} $\bm P\ge 0$\\
+2.\textbf{规范性} 对于必然事件 $\bm P(\bm \Omega)=1$\\
+3.\textbf{可列可加性} 对于两两互不相容的事件$\{\bm A_i\}, \bm{A_iA_j}=\emptyset.$
+\begin{equation}
+    \bm P(\bigcup_{i=1}^{+\infty} \bm A_i)=\sum_{i=1}^{+\infty} \bm {P(A_i)}
+\end{equation}
+\subsection{公式}
+\begin{align*}
+     & P(\bigcup A_i)=\sum P(A_i)-\sum P(A_iA_j)+\sum P(A_iA_jA_k)+\ldots+(-1)^{n-1}P(A_1A_2\ldots A_n) \\
+     & |\bigcup A_i|=\sum |A_i|-\sum |A_iA_j|+ \sum |A_iA_jA_k| +\ldots +(-1)^{n-1}|A_1A_2\ldots A_n|   \\
+     & |A-B|= |A|-|AB|
+\end{align*}
+\subsection{条件概率}
+\begin{equation}
+    \bm P (\bm{A|B})=\frac{\bm P(\bm {AB})}{\bm P(\bm B)}
+\end{equation}
+假设$\bm \Omega$不变，则条件$\bm B$说明$\bm B$成为全空间。概率即为$\bm A$的测度比上$\bm B$的测度。
+\subsection{Bayes公式}
+设$\{\bm B_i\}$为$\bm \Omega$ 的一个划分
+\begin{equation}
+    \bm P(\bm {A|\Omega})=\sum \bm P(\bm B_i)\bm P(\bm {A|B_i})
+\end{equation}
+于是
+\begin{equation}
+    \bm P(\bm {B_i|A})=\frac{\bm P (\bm {AB_i})}{\bm P(\bm A)}=\frac{\bm P(\bm B_i)\bm P(\bm {A|B_i})}{\displaystyle \sum \bm P(\bm B_i)\bm P(\bm {A|B_i})}
+\end{equation}
+\subsection{独立性}
+设n个事件$\bm {A_1,A_2,\ldots,A_n}$,相互独立要求
+%\begin{equation}
+\begin{align}
+    \bm P(\bm{A_iA_j})            & =\bm P(\bm A_i)\bm P(\bm A_j) \notag              \\
+    \bm P(\bm {A_iA_jA_k})        & =\bm P(\bm A_i)\bm P(\bm A_j)\bm P(\bm A_k)\notag \\
+    \ldots\ldots                                                                      \\
+    \bm P(\bm {A_iA_j\ldots A_n}) & =\prod \bm p(\bm A_i) \notag
+\end{align}
+{\color{blue}互斥一定不独立；{看成全空间下均匀散点比较好: 不均匀则有的地方"更浓"}}
+%\end{equation}
+\clearpage
+\section{随机变量}
+\subsection{随机变量 is 函数}
+随机变量是$\bm \Omega$上的实单值函数$\bm X(\bm \omega)$
+\subsection{分布函数}
+\begin{equation}
+    \bm F(x)=\bm P(\bm X\le x),\qquad -\infty<x<+\infty
+\end{equation}
+性质：
+\begin{equation}
+    \begin{aligned}
+        \bm P(a<x\le b)           & =\bm F(b)-\bm F(a)                        \\
+        \bm P(\bm X=x_0)          & =\bm F(x_0)-\bm F(x_0-0)                  \\
+        \text{左极限存在，右连续} & \lim_{t\rightarrow x^+} \bm F(t)=\bm F(x)
+    \end{aligned}
+\end{equation}
+\subsection{离散型随机变量}
+离散型随机变量的可能取值是{\color{red}可列}个，设可能取值$\bm X=x_k\ (k=1,2,\ldots)$，不妨设$x_1<x_2<\ldots$，称$\bm P(\bm X=x_k)=p_k,\ k=1,2\ldots$为$\bm X$ 的分布律，且有：\\
+\begin{equation}
+    \begin{aligned}
+        p_k\geq 0                  & \qquad k=1,2,\ldots \\
+        \sum_{k=1}^{+\infty} p_k=1 &
+    \end{aligned}
+\end{equation}
+
+\subsubsection{离散型随机变量分布律}
+\paragraph{二项分布$\bm X\~{}\bm B(n,p)$} 进行n次成功k次 $\bm P(\bm X=k)=C_n^k p^k(1-p)^{n-k}$
+\paragraph{帕斯卡分布} 成功r次恰需要k次，k成功且前k-1成功r-1
+\begin{equation} \bm P(\bm X=k)=p C_{k-1}^{r-1} p^{r-1}(1-p)^{k-r}=C_{k-1}^{r-1}p^r(1-p)^{k-r} \end{equation}
+\paragraph{Poisson分布\\}
+\textbf{定理: } 若 $\lim\limits_{n\rightarrow+\infty} np_n=\lambda>0$,
+\begin{equation}\lim\limits_{n\rightarrow +\infty} C_n^k p_n^k(1-p_n)^{n-k}=e^{-\lambda}\frac{\lambda^k}{k!}\end{equation}
+\textbf{Poisson分布X\~{}P($\lambda$)：}均匀概率密度，$\lambda$，发生次数。
+\begin{equation}
+    \bm P(\bm X=k)=e^{-\lambda}\frac{\lambda^k}{k!}
+\end{equation}
+\subsection{连续型随机变量}
+设$\bm X$是一随机变量，$\bm F(x)$ 是他的分布函数，若存在一个非负可积函数$f(X)$，使得\\
+\begin{equation}
+    \bm F(x)=\int_{-\infty}^x f(t)\mathrm{d}t,\qquad -\infty<x<+\infty
+\end{equation}
+则X是连续型随机变量，f(x)是概率密度函数，且{\color{blue} 积上去不一定可导（似乎一般可导）}：\\
+\begin{equation}
+    \begin{aligned}
+        f(x)                                     & \geq 0                                       \\
+        \int_{-\infty}^{+\infty} f(x)\mathrm{d}x & =\bm F(+\infty) =1                           \\
+        f(x)=                                    & \bm F'(x) \qquad where\ f(x)\ is\ continuous \\
+    \end{aligned}
+\end{equation}
+\subsubsection{连续性随机变量分布律}
+\paragraph{指数分布 $\bm X \~{} \bm E(\lambda)$：} 无记忆性 or 均匀概率密度，相邻两次发生的间隔。
+\begin{equation}
+    f(x)=\left\{
+    \begin{aligned}
+        \lambda e^{-\lambda x}, & \qquad x>0     \\
+        0\quad,                 & \qquad x\leq 0
+    \end{aligned}\right. \qquad(\lambda>0)
+\end{equation}
+\paragraph{正态分布 $\bm X\~{}\bm N(\mu,\sigma^2)$}
+\begin{equation}
+    f(x)=\frac{1}{\sqrt{2\pi} \sigma} e^{-\frac{(x-\mu)^2}{2\sigma^2}},\qquad x\in R\\
+\end{equation}
+参数 $\mu=0,\ \sigma=1$ 的正态分布称为标准正态分布，记为$\bm X^*\~{} \bm N(0,1)$。其概率密度$\varphi(x)=\frac{1}{\sqrt{2\pi}\sigma} e^{-\frac{x^2}{2}}$.分布函数$\bm \varPhi(x)=\frac{1}{\sqrt{2\pi}}\int_{-\infty}^x e^{-\frac{t^2}{2}}\mathrm{d}t$
+
+\section{二维随机变量及分布律}
+\subsection{二维随机变量}
+对随机试验$E$的样本空间$\Omega$, 若对$\Omega$中任一样本点$\omega$, 存在实数$(X(\omega),Y(\omega))$与之对应，则称$(X,Y)$为二维随机变量
+
+\subsection{（联合）分布函数}
+\textbf{定义：}
+\begin{equation}
+    F(x,y)=P(\{X\leq x\}\cap \{Y\leq y\})=P(X\leq x,Y\leq y)
+\end{equation}\par
+联合分布函数的性质：
+\begin{center}
+    \begin {tabular}{l}
+    1. $\qquad 0\leq F(x,y)\leq 1$\\
+    $F(-\infty,y)=F(x,-\infty)=F(-\infty,-\infty)=0, F(+\infty,+\infty)=1$\\
+    \\
+    2. 固定其他变量，对某一特定变量是单调不减函数。\\
+    3. 固定其他变量，关于某特定变量右连续\\
+    \\
+    4. 对于任意的 $a,b,c,d$, 满足 $a<b$, $c<d$，有：\\
+    $F(b,d)-F(a,d)-F(b,c)+F(a,c)=P(a<X\leq b,c<Y\leq d)\geq 0$\\
+    \color{blue} \textbf{NOTE：} 不像一维那样，这里存在只满足前三点不满足第四点的函数（但第四点是用定义推出来的）
+    \end{tabular}
+\end{center}
+
+\subsection{边缘分布函数}
+\textbf{定义}：边缘分布函数为 $F_X(x)$ 和 $F_Y(y)$.\par
+性质：$F_X(x)=F(x,+\infty),\ F_Y(y)=F(+\infty,y)$
+
+\subsection{二维离散随机变量}
+\textbf{定义:} 样本点可列，$p_{ij}$ 为分布律。$F(x,y)=\sum\limits_{i=-\infty}^x \sum\limits_{j=-\infty}^y p_{ij}$.\\
+\centering $P((X,Y)\in D)=\sum\sum\limits_{(i,j)\in D} p_{i,j}$\\
+
+\raggedright
+\subsection{二维连续随机变量}
+\textbf{定义：} 若存在非负可积函数$f(x,y)$, s.t. $F(x,y)=\displaystyle\int_{-\infty}^x \int_{-\infty}^y f(u,v) \mathrm{d}u\mathrm{d}v$\\
+\centering $\displaystyle P((X,Y)\in D)=\iint_{D} f(x,y) \mathrm{d}x\mathrm{d}y$\\
+
+\raggedright
+\subsection{条件分布}
+离散：$P(X=x_i|Y=y_j)=\displaystyle\frac{p_{i,j}}{p_{\cdot j}}$\\
+连续：在\{Y=y\}条件下X的条件概率密度: $f_{X|Y}(x|y)=\displaystyle\frac{f(x,y)}{f_Y(y)}$
+
+\subsection{独立性}
+\begin{center}
+    $F(x,y)=F_X(x)F_Y(y).$\\
+    $p_{i,j}=p_{i,\cdot}p_{\cdot,j}$\\
+    $f(x,y)=f_X(x)f_Y(y)$
+\end{center}
+\subsubsection{独立性的定理}
+1.设 X,Y 为相互独立的随机变量，u(x),v(y)为连续函数。则U，V也相互独立\\
+2.若 X,Y 在相互独立的定义域上，有 $f(x,y)=r(x)g(y)$，则X,Y独立。
+
+\subsection{二维随机变量函数的分布}
+\begin{equation}
+    \begin{aligned}
+        P(Z=z_k)=\sum_{g(x_{i_k},y_{j_k})=z_k} P(X=x_{i_k},Y=y_{j_k}) \\
+        Poisson\text{分布、二项分布可加（X,Y 独立）}                  \\
+        F_Z(z)=\iint_{g(x,y)\leq z} f(x,y) \mathrm{d}x\mathrm{d}y     \\
+    \end{aligned}
+\end{equation}
+\subsubsection{卷积，一般线性函数的分布}
+{\color{blue} $f(z)\mathrm{d}z=f(z)\mathrm{d}z\wedge R$} （不太对）
+\subsubsection{正态分布可加}
+\subsubsection{m个独立指数分布的最小 $\min\{X_1,X_2,\ldots, X_m\} \~{} E(m\lambda)$}
+
+
+\section{随机变量的数字特征}
+\subsection{期望}
+\subsubsection{定义：绝对收敛}
+\subsubsection{公式}
+（对于同一个样本空间下，在同样的随机分布中不同的随机变量$X_i$有：）
+\begin{tabular}{l}
+    线性：$E((\sum A_iX_i+B_i))=\displaystyle\sum A_iEX_i+b_i$, \\
+    独立时 $E(\prod X_i)=\displaystyle\prod E(X_i)$             \\
+    多维时总可以把联合分布合起来，这样就是同一个分布函数下的变量问题。
+\end{tabular}
+\subsection{方差}
+\subsubsection{定义}
+\begin{equation*}
+    \begin{aligned}
+        \text{方差：}D(X)=        & E[X-EX]^2=E(X^2)-(EX)^2 \\
+        \text{标准差：} \sigma_X= & \sqrt{D(X)}             \\
+    \end{aligned}
+\end{equation*}
+
+{\small 多维则用联合概率分布。}
+\subsubsection{性质}
+\begin{equation*}
+    \begin{aligned}
+         & \text{D存在} \Longleftrightarrow E(X^2)<+\infty. \\
+         & D(X-Y)=D(X)+D(Y)-2E[(X-EX)(Y-EY)]                \\
+         & D(\sum a_i X_i+b)=\sum a_i^2 D(X_i)
+    \end{aligned}
+\end{equation*}
+\subsection{标准化随机变量}
+\begin{equation*}
+    X^*=\frac{X-E(X)}{\sqrt{D(X)}}\Longrightarrow EX^*=0, DX^*=1
+\end{equation*}
+\subsection{协方差和相关系数}
+\subsubsection{定义}
+\begin{equation*}
+    \begin{aligned}
+        \text{cov}(X,Y) & =E[(X-EX)(Y-EY)]                                                        \\
+        \rho_{XY}       & =\frac{E[(X-EX)(Y-EY)]}{\sqrt{D(X)}\sqrt{D(Y)}}=E[(X^*-EX^*)(Y^*-RY^*)]
+    \end{aligned}
+\end{equation*}
+\subsubsection{公式}
+\begin{gather*}
+    \rho_{XY}=\frac{cov(X,Y)}{\sqrt{D(X)}\sqrt{D(Y)}}=cov(X^*,Y^*)\\
+    cov(X,Y)=E(XY)-E(X)E(Y)\\
+    D(X)=cov(X,X)
+\end{gather*}
+\subsubsection{性质}
+独立一定不相关，相关一定不独立。\\
+不独立不一定相关，不相关不一定独立
+
+线性：
+\begin{equation*}
+    cov(\sum_i a_iX_i, \sum_j b_jY_j)=\sum\sum a_ib_j cov(X_i,Y_j)
+\end{equation*}
+Cauchy-Schwarz:
+\begin{gather*}
+    |cov(X,Y)|\leq \sqrt{D(X)D(Y)}
+\end{gather*}
+\begin{center}
+    {\small
+        证 cov(x,y)是内积: 线性，可交换\\
+        正定： $cov(x,x)\geq 0$
+    }
+\end{center}
+\subsection{高阶矩}
+\paragraph{k阶原点矩} $E(X^k)$
+\paragraph{k阶中心矩} $E([X-E(X)]^k)$
+\paragraph{X和Y的k+l阶混合原点矩} $E(X^kY^l)$
+\paragraph{X和Y的k+l阶混合中心矩} $E([X-EX]^K[Y-EY]^l)$
+\subsubsection{协方差矩阵}
+\begin{gather}
+    c_{ij}=cov(X_i,X_j)\\
+    \bm C=\begin{pmatrix}
+        c_{ij}
+    \end{pmatrix}
+\end{gather}
+性质：（内积）\\
+n维正态分布：
+\begin{equation}
+    f(x_1,x_2,\cdots,x_n)=\frac{1}{(2\pi)^{n/2}\vert\bm C\vert^{1/2}} e^{-\frac{1}{2}(\bm x-\bm \mu)^T C^{-1} (\bm x-\bm \mu)}
+\end{equation}
+
+\clearpage
+\section{大数定理和中心极限}
+\subsection{Chebyshev Inequality}
+\begin{equation*}
+    P(\vert X-E(X) \vert\geq \epsilon)\leq \frac{\sigma^2}{\epsilon^2}, \quad \forall \epsilon>0
+\end{equation*}
+\subsection{依概率收敛}
+已知$\{Y_n\}=Y_1,Y_2,\ldots,Y_n$, $X$是一个随机变量。依概率收敛定义为：$\forall \epsilon>0,$
+\begin{equation*}
+    \lim_{n\rightarrow +\infty} P(\vert Y_n-X\vert\geq \epsilon)=0 \text{ or } \lim_{n\rightarrow +\infty} P(\vert Y_n -X\vert< \epsilon)=1
+\end{equation*}
+这里$X$一般单值，也可以 $Y_n = X + X_n$，但可能独立不太行
+
+\subsection{大数定律 —— 次数多起来后频率趋于期望}
+\subsubsection{Bernoulli 大数定理 —— 二项分布的频率收敛于概率}
+\subsubsection{Chebyshev 大数定律}
+设 $\{X_n\}$ 两两不相关，方差存在且一致有界，则
+\begin{equation*}
+    \lim_{n\rightarrow+\infty} P(\vert \frac{1}{n}\sum_{i=1}^n X_i -\frac{1}{n}\sum_{i=1}^n a_i\vert<\epsilon)=1
+\end{equation*}
+但需要注意普遍来说这里需要方差，极限只要求期望。这不好
+\subsubsection{Khintchine 大数定律}
+$\{X_n\}$: \textbf{独立同分布 I,I,D}且期望存在，则
+\begin{equation*}
+    \lim_{n\rightarrow+\infty} P(\vert \frac{1}{n}\sum_{k=1}^n X_k-E(X)\vert\geq \epsilon)=0
+\end{equation*}
+变化一下， $X^k\rightarrow E(X_k)$
+\subsection{中心极限定理}
+\subsubsection{独立同分布的中心极限定理}
+设$\{X_n\}$为独立同分布的随机变量序列，且他们的期望方差都存在。$E(X_k)=\mu, D(X_k)=\sigma^2.$，则对任意实数$x$，有：
+\begin{equation}
+    \lim_{n\rightarrow+\infty} P(\frac{\sum_{i=1}^n X_k-n\mu}{\sqrt{n}\sigma}\leq x)=\varPhi(x)
+\end{equation}
+若记$\sum_{k=1}^n X_k$ 的标准化随机变量为$Y_n=\frac{\sum_{k=1}^n X_k}{\sqrt{n}\sigma}$, 即 $Y_n\~{} N(0,1)$
+
+\subsubsection{De Moivre-Laplace 中心极限定理}
+设随机变量 $Y_n\~{} B(n,p))$，$0<p<1,n=1,2$，则对任一实数$x$，有：
+\begin{equation}
+    \lim_{n\rightarrow+\infty} P(\frac{Y_n-np}{\sqrt{np(1-p)}}\leq x)=\varPhi(x)
+\end{equation}
+\clearpage
+\section{统计}
+\subsection{基本概念}
+\paragraph{总体：}研究对象的某个（或某些）数量指标的全体称为\textbf{总体}
+\paragraph{个体：}总体的每个元素（数量指标）
+\paragraph{样本：}总体的部分
+\paragraph{样本观测值：}样本值
+\paragraph{样本空间：}样本$(X_1,X_2,\cdots,X_n))$的所有可能取值的集合$\chi=\{(x_1,x_2,\cdots,x_n)\}$
+\paragraph{简单随机样本：}独立同分布
+\subsection{简单随机样本}
+\subsubsection{统计量}
+设$(X_1,X_2,\ldots,X_n)$为总体$X$的简单随机样本，$g(r_1,r_2,\cdots,r_n)$是一个实值连续函数，且不含除自变量之外的未知参数.\\
+称随机变量$g(X_1,X_2,\ldots,X_n)$为\textbf{统计量}，$g(x_1,x_2,\ldots,x_n)$为样本值
+\subsubsection{常用统计量}
+\paragraph{样本均值} $\bar X$,$\bar x$
+\paragraph{样本方差} $S^2=\frac{1}{n-1}\sum_{i=1}^n (X_i-\bar X)^2$, $s^2$ {\color{blue} $\bar X$是一个变量，导致不能提出去。}\\
+\paragraph{样本标准差} $S=\sqrt{S^2}$, $s$
+\paragraph{样本k阶原点矩} $M_k=\frac{1}{n} \sum_{i=1}^n X_i^k$,$m_k$
+\paragraph{样本k阶中心矩} $(CM)_k=\frac{1}{n}\sum_{i=1}^n (X_i-\bar X)^k$, $(cm)_k$
+\paragraph{顺序统计量} sort($(X_1,X_2,\cdots, X_n)$)，极差
+\paragraph{\color{blue}NOTE!! $X$（or $\bar X$）不是一个数，而是一个随机变量（分布）}
+$E(\bar X)=\mu, \bar X\neq E(X), D(\bar X)=\frac{\sigma^2}{n}, E(S^2)=\sigma^2$
+\paragraph{分位数}
+\begin{tabular}{l}
+    对于连续随机变量$X$，给定$0<\alpha<1$.                                                                            \\
+    若$P(X>x_\alpha)=\alpha$,则$x_\alpha$为$X$所服从分布的上侧$\alpha$分位数。                                        \\
+    若$f(x)$为偶函数，则如果$P(\vert X\vert> x_{\alpha/2})=\alpha$，则$x_{\alpha/2}$为$X$服从分布的双侧$\alpha$分位数 \\
+    $x_{\alpha/2}=x_{1-\alpha/2}$
+\end{tabular}
+\subsection{常用分布}
+\paragraph{正态分布}
+\paragraph{$\chi^2$分布}
+设$\{X_n\}$独立且$X_i\~{}N(0,1)$，则称统计量{\color{blue}$\displaystyle\chi^2=\sum_{i=1}^n X_i^2$}: 服从自由度为n的$\chi^2$分布，记为 $\sum_{i=1}^n X_i\~{} \chi^2(n)$.
+\begin{equation}
+    f_{\chi^2}(x)=\left\{\begin{aligned}
+         & \displaystyle\frac{1}{2^{\textstyle\frac{n}{2}}\Gamma(\frac{n}{2})} e^{-\textstyle\frac{x}{2}}x^{\textstyle\frac{n}{2}-1}, & x>0     \\
+         & 0,                                                                                                                         & x\leq 0
+    \end{aligned}\right.
+\end{equation}
+其中$\Gamma(x)=\displaystyle\int_0^{+\infty} t^{x-1}e^{-t}\mathrm{d}t$\\
+\paragraph{性质：}
+\begin{tabular}{l}
+    1. $E(\chi^2)=n,\ D(\chi^2)=2n$                                                                  \\
+    2. $X_1\~{} \chi^2(n_1),\ X_2\~{} \chi^2(n_2)$, 且$X_1,X_2$独立，则$X_1+X_2\~{} \chi^2(n_1+n_2)$ \\
+    3. n 很大时， $\chi^2$近似服从$N(n,2n)$.
+\end{tabular}
+
+\paragraph{t分布}
+$X\~{} N(0,1), Y\~{} \chi^2(n)$ 且 $X,Y$独立，则{\color{blue}$\displaystyle T=\frac{X}{\sqrt{Y/n}}=\frac{X}{\sqrt{\chi^2(n)/n}}$}: 服从自由度为n的t分布， 记为$T\~{} t(n)$.
+\begin{equation}
+    f(t)=\frac{\Gamma(\frac{n+1}{2})}{\sqrt{n\pi}\Gamma(\frac{n}{2})}(1+\frac{t^2}{n})^{-\frac{n+1}{2}}, \qquad t\in R
+\end{equation}
+\paragraph{性质}
+\begin{tabular}{l}
+    1. $f(t)=-f(t)$                                                                                                       \\
+    2. $n\longrightarrow +\infty$, $f(t)\longrightarrow \varphi (t)=\displaystyle\frac{1}{\sqrt{2\pi}}e^{-\frac{t^2}{2}}$ \\
+    3. 上侧$\alpha$ 分位数 $t_\alpha(n)$ : $t_{1-\alpha}(n)=-t_\alpha(n)$
+\end{tabular}
+
+\paragraph{$F$分布}
+设$U\~{}\chi^2(m),\ V\~{}\chi^2(n)$, 且$U$与$V$独立，则称随机变量{\color{blue}$\displaystyle F=\frac{U/m}{V/n}=\frac{\chi^2(m)/m}{\chi^2(n)/n}$}: 服从第一自由度为$m$,第二自由度为$n$的$F$分布，记为 $F\~{} F(m,n)$
+\begin{equation}
+    f_F(t)=\left\{
+    \begin{aligned}
+         & \frac{\Gamma(\frac{m+n}{2})}{\Gamma(\frac{m}{2})\Gamma(\frac{n}{2})} (\frac{m}{n})^{\frac{m}{2}}t^{\frac{m}{2}-1}(1+\frac{m}{n}t)^{-\frac{m+n}{2}} & t>0,    \\
+         & 0                                                                                                                                                  & t\leq 0
+    \end{aligned}
+    \right.
+\end{equation}
+\paragraph{性质}
+\begin{tabular}{l}
+    1. $F\~{} F(m,n),\ \frac{1}{F}\~{} F(n,m)$ \\
+    2. $F(m,n)$的上侧$\alpha$分位数$F_\alpha(m,n)$ ： $F_{1-\alpha}(m,n)=\frac{1}{F_\alpha(n,m)}$
+\end{tabular}
+
+
+
+\clearpage
+\subsection{正态总体的抽样分布}
+$X\~{} N(\mu,\sigma^2),\{X_i\}\~{} N(\mu,\sigma^2)$是来自总体的$i.i.d$.独立同分布。\\
+\begin{align}
+    \bar X=                   & \frac{1}{n}\sum_{i=1}^n X_i \~{} N(\mu, \sigma^2/n)  \\
+    \frac{(n-1)S^2}{\sigma^2} & =\sum\frac{(X_i-\bar X)^2}{\sigma^2}\~{} \chi^2(n-1) \\
+    \bar X \text{与}          & \frac{(n-1)S^2}{\sigma^2} \text{独立}
+\end{align}
+\begin{align}
+    \frac{\bar X-\mu}{\sigma/\sqrt{n}}\~{} N(0,1) \\
+    \frac{\bar x-\mu}{S/\sqrt{n}}\~{} t(n-1)
+\end{align}\\
+
+\subsubsection*{两个正态总体的情形}
+$\{X_n\}\~{} N(\mu_1,\sigma_1^2),\{Y_m\} \~{} N(\mu_2,\sigma_2^2)$. 且$X,Y$独立
+\begin{align}
+    \frac{S_1^2/\sigma_1^2}{S_2^2/\sigma_2^2}\~{} F(n-1,m-1).
+\end{align}
+若$\sigma_1=\sigma_2=\sigma$:
+\begin{align}
+    \bar X-\bar Y\~{} N(\mu_1-\mu_2,\frac{\sigma^2}{n}+\frac{\sigma^2}{n})                      \\
+    \text{由可加性} \frac{(n-1)S_1^2}{\sigma^2}+\frac{(m-1)S^2_2}{\sigma^2}\~{} \chi^2(m+n-2)   \\
+    \bar X-\bar Y \text{与} \frac{(n-1)S_1^2}{\sigma^2}+\frac{(m-1)S_2^2}{\sigma^2} \text{独立} \\
+    \frac{(\bar X-\bar Y)-(\mu_1-\mu_2)}{\sqrt{\frac{1}{n}+\frac{1}{m}}\sqrt{\frac{(n-1)S_1^2+(m-1)S_2^2}{m+n-2}}} \~{} T(m+n-2)
+\end{align}
+\section{参数估计}
+\subsection{点估计}
+\subsubsection{频率替代法————大数定律}
+\subsubsection{矩估计法}
+设总体$X$的分布函数为$F(x;\theta_1,\cdots,\theta_k)$，并假设$k$阶原点矩存在。记
+\begin{equation}
+    E(X^r)=\mu_r(\bm\theta)\quad r=1,2\ldots,k
+\end{equation}
+则$\bm \theta$有k个未知数，需要k个方程。从理论上推导出$\bm \mu$的k个表达式，将$\mu_i$替换成样本矩$M^k$，反解$\bm \theta=\hat{\bm\theta}$。称$\hat{\bm \theta}(X_1,\ldots,X_n)$为矩估计量，$\hat{\bm \theta}(\bm x)$为矩估计量
+\subsubsection{极大似然估计}
+定义似然函数\[L(\bm \theta)=P(\bigcap X_i=x_i)=\prod_{i=1}^n P(x_i;\bm \theta)\]
+连续情形下\[L(\bm \theta)=\prod_{i=1}^n f(x_i;\bm \theta)\]
+$L$极大，$L(\hat{\bm \theta})=\max L(\bm \theta)$. 称$\hat{\bm \theta}(\bm x)$为最大似然估计值，$\hat{\bm \theta}(X_1,\ldots,X_n)$为最大似然估计量
+\subsection{估计量的评价标准}
+\subsubsection{无偏性}
+对于$\hat{\theta}=\hat{\theta}(X_1,\ldots,X_n)$,若
+\[E(\hat{\theta})=\theta\]
+则称$\hat{\theta}$是$\theta$的无偏估计量，反之，称$\epsilon=E(\hat{\theta})-\theta$为估计量$\hat{\theta}$的偏差
+\begin{tabular}{l}
+    ·对任意分布$X$，$\bar X$都是总体均值$\mu=E(X)$的无偏估计量， $S^2$是$\sigma^2$的无偏估计量 \\
+    ·$E(\hat\theta)=\theta$不一定得到$E(f(\hat{\theta}))=f(\theta)$
+\end{tabular}
+\subsubsection{有效性}
+设$\hat{\theta_1}$和$\hat{\theta_2}$均为参数$\theta$的\textbf{无偏估计量}，若\[D(\hat{\theta_1})<D(\hat{\theta_2})\],称$\theta_1$比$\theta_2$有效\\
+\paragraph{·Rao-Cramer不等式\\}
+设总体$X$为离散型随机变量， $P(X=x;\theta)=P(x;\theta)$. $(X_1,\ldots,X_n)$是简单随机样本
+\begin{equation}
+    D(\hat{\theta})\geq I(\theta)=\frac{1}{nE[\displaystyle(\frac{\partial \ln P(X;\theta)}{\partial \theta})^2]}
+\end{equation}
+设总体$X$为连续性随机变量，概率密度为$f(x;\theta)$，$\hat{\theta}$是\textbf{无偏估计量}，
+\begin{equation}
+    D(\hat{\theta})\geq I(\theta)=\frac{1}{nE[(\displaystyle\frac{\partial \ln f(X;\theta)}{\partial \theta})^2]}
+\end{equation}
+$I(\theta)$称为无偏估计的方差下界。
+\subsubsection{有效估计量}
+设$\hat\theta_0$是$\theta$的无偏估计量，如果在所有$\theta$的无偏估计量$\hat\theta$中均有$D(\hat\theta_0)\leq D(\hat\theta)$.称$\hat \theta_0$是$\theta$的有效估计量
+\subsubsection{一致性}
+设$\hat\theta_n=\hat\theta(X_1,\ldots,X_n)$是$\theta$的估计量，如果$\{\hat\theta_n\}\xrightarrow{p} \theta$, 则称$\hat{\theta}_n$是$\theta$的一致估计量。\\
+·不要求无偏。而无偏+方差$\rightarrow$ 0 $\Longrightarrow$ 一致
+\subsection{区间估计}
+设总体$X$的分布函数为$F(x;\theta)$，$\{X_n\}$是一个样本，若
+\[\forall \alpha, \exists \hat{\theta}_1=\hat{\theta}_1(X_1,\ldots,X_n),\hat{\theta}_2=\hat{\theta}_2(X_1,\ldots,X_n).\ s.t.\ P(\hat{\theta}_1<\theta<\hat{\theta}_2)=1-\alpha\]
+成立，则称区间$(\hat{\theta}_1,\hat{\theta}_2)$是$\theta$的置信度为$1-\alpha$的置信区间，$\hat{\theta}_1$和$\hat{\theta}_2$是置信下限和致信上限
+\paragraph{枢轴量} $U=U(X_1\ldots X_n;\theta)$ 除$\theta$没有其他未知参数，$U$分布已知且不依赖于未知参数
+\end{document}
